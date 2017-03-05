@@ -17,6 +17,7 @@ package com.xengar.android.speech;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -26,11 +27,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private static final String PREFS = "prefs";
+    private static final String NAME = "name";
+    private static final String AGE = "age";
+    private static final String AS_NAME = "as_name";
     private TextToSpeech tts;
 
     @Override
@@ -47,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "This Language is not supported");
                     }
-                    speak("Hello");
+                    speak("Hello, What is your name?");
 
                 } else {
                     Log.e("TTS", "Initilization Failed!");
@@ -62,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 listen();
             }
         });
+
+        preferences = getSharedPreferences(PREFS,0);
+        editor = preferences.edit();
     }
 
     @Override
@@ -113,5 +125,36 @@ public class MainActivity extends AppCompatActivity {
     private void recognition(String text){
         Log.e("Speech",""+text);
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+
+        String[] speech = text.split(" ");
+
+        //if the speech contains these words, the user is saying their name
+        if(text.contains("my name is")){
+            String name = speech[speech.length-1];
+            Log.e("Your name", "" + name);
+            editor.putString(NAME,name).apply();
+            speak("Your name is "+preferences.getString(NAME,null));
+        }
+
+        //Just speak: I am x years old.
+        if(text.contains("years") && text.contains("old")){
+            String age = speech[speech.length-3];
+            Log.e("THIS", "" + age);
+            editor.putString(AGE, age).apply();
+        }
+
+        //Then ask it for your age
+        if(text.contains("how old am I")){
+            speak("You are " + preferences.getString(AGE,null) + " years old.");
+        }
+
+        //Ask: What time is it?
+        if(text.contains("what time is it")){
+            SimpleDateFormat sdfDate = new SimpleDateFormat("HH:mm");//dd/MM/yyyy
+            Date now = new Date();
+            String[] strDate = sdfDate.format(now).split(":");
+            if(strDate[1].contains("00"))strDate[1] = "o'clock";
+            speak("The time is " + sdfDate.format(now));
+        }
     }
 }
