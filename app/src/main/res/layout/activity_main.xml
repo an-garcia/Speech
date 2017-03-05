@@ -14,12 +14,21 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:id="@+id/rel"
     tools:context="com.xengar.android.speech.MainActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/microphoneButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_mic_none_white_48dp"
+        android:background="@null"/>
+
+</RelativeLayout>
