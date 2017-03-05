@@ -3,8 +3,8 @@ Speech
 
 ![Scheme](/readmeImages/Screenshot_1481836147.png)
 
-
-Speech android application to learn Text to Speech.
+Android Text-to-Speech to Create an Assistant
+Sample android application to learn Text to Speech base on [tutorial](https://www.sitepoint.com/using-android-text-to-speech-to-create-a-smart-assistant/)
 
 
 Pre-requisites
